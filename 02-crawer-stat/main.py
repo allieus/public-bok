@@ -15,8 +15,6 @@ class Window(QMainWindow):
         self.ui.tableWidget.verticalHeader().setVisible(False)
         self.ui.show()
 
-        self.adjustSize()
-
         self.crawer = KitaCrawler()
         self.data = []
 
