@@ -9,7 +9,7 @@ class KitaCrawler(object):
         self.init()
 
     def init(self):
-        html = requests.get('http://stat.kita.net/stat/kts/prod/ProdItemImpExpList.screen').text
+        html = requests.get('http://stat.kita.net/stat/kts/prod/ProdItemImpExpList.screen', timeout=3).text
 
         try:
             this_yy = re.search('var\s+thisYY\s+=\s+\"(.+?)\"', html).group(1)
@@ -63,7 +63,7 @@ class KitaCrawler(object):
             'pageNum': page,
             'listCount': max,
         })
-        r = requests.post('http://stat.kita.net/stat/kts/prod/ProdItemImpExpListWorker.screen', data=form_data)
+        r = requests.post('http://stat.kita.net/stat/kts/prod/ProdItemImpExpListWorker.screen', data=form_data, timeout=3)
         xml = r.text.strip().encode(r.encoding)
         doc = ET.fromstring(xml)
         rows = []

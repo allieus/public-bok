@@ -1,13 +1,24 @@
 import sys
-from PyQt5 import uic
+from PyQt5 import uic as pyqt5_uic
+# from PyQt4 import uic as pyqt4_uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 
+STYLESHEET = '''
+QWidget#Form {
+    background-image: url('python-logo.png');
+}
+QPushButton {
+    background-color: yellow;
+}
+'''
 
 class Window(QMainWindow):
-    def __init__(self):
+    def __init__(self, app):
         super(Window, self).__init__()
 
-        self.ui = uic.loadUi('main.ui')
+        app.setStyleSheet(STYLESHEET)
+
+        self.ui = pyqt5_uic.loadUi('main.ui')
         self.ui.pushButton.clicked.connect(self.calc)
         self.ui.show()
 
@@ -20,6 +31,6 @@ class Window(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    window = Window()
+    window = Window(app)
     sys.exit(app.exec_())
 

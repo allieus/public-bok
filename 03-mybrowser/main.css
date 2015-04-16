@@ -1,0 +1,9 @@
+QWidget#Form {
+    background-image: url(bg.jpg);
+}
+
+#listWidget {
+    background-color: rgba(255, 255, 255, 100);
+    selection-color: white;
+    selection-background-color: rgb(191, 31, 127);
+}

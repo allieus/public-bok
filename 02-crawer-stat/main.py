@@ -36,6 +36,7 @@ class Window(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    app.setStyleSheet('QTableView { selection-color: red; selection-background-color: yellow; }')
     window = Window()
     sys.exit(app.exec_())
 
