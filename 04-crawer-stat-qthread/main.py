@@ -16,6 +16,7 @@ class KitaThread(QThread):
         self.page = page
         self.max = max
         self.rows = []
+        self.is_running = True
 
     def run(self):
         self.crawer = KitaCrawler()
@@ -27,6 +28,8 @@ class KitaThread(QThread):
         end_page = self.page + once
 
         for idx, current_page in enumerate(range(start_page, end_page)):
+            if not self.is_running:
+                break
             percent = 100 * (idx+1) / (end_page - start_page)
 
             print('current_page : {}'.format(current_page))
@@ -34,13 +37,16 @@ class KitaThread(QThread):
             self.rows.extend(self.crawer.get_page(current_page, self.max))
             sleep(0.1)
 
+    def stop(self):
+        self.is_running = False
+
 
 class Window(QMainWindow):
     def __init__(self):
         super(Window, self).__init__()
 
         self.ui = uic.loadUi('main.ui')
-        self.ui.pushButton.clicked.connect(self.populate)
+        self.ui.pushButton.clicked.connect(self.on_clicked)
         self.ui.tableWidget.verticalHeader().setVisible(False)
         self.ui.show()
 
@@ -48,7 +54,16 @@ class Window(QMainWindow):
 
         self.data = []
 
+    def on_clicked(self):
+        if self.kita_thread is None:
+            self.populate()
+        else:
+            self.kita_thread.stop()
+            self.ui.label.setText('취소되었습니다.')
+
     def populate(self):
+        self.ui.pushButton.setText('취소')
+
         page = self.ui.spinPage.value()
         max = self.ui.spinMax.value()
 
@@ -73,6 +88,7 @@ class Window(QMainWindow):
                 self.ui.tableWidget.setItem(row_idx, col_idx, item)
 
         self.kita_thread = None
+        self.ui.pushButton.setText('시작')
 
 
 if __name__ == '__main__':
