@@ -42,16 +42,19 @@ class Window(QMainWindow):
         self.ui.tableWidget.verticalHeader().setVisible(False)
         self.ui.show()
 
+        self.kita_thread = None
+
         self.data = []
 
     def populate(self):
         page = self.ui.spinPage.value()
         max = self.ui.spinMax.value()
 
-        self.kita_thread = KitaThread(page, max)
-        self.kita_thread.status_changed.connect(self.on_thread_status_changed)
-        self.kita_thread.finished.connect(self.on_thread_finished)
-        self.kita_thread.start()
+        if self.kita_thread is None:
+            self.kita_thread = KitaThread(page, max)
+            self.kita_thread.status_changed.connect(self.on_thread_status_changed)
+            self.kita_thread.finished.connect(self.on_thread_finished)
+            self.kita_thread.start()
 
     def on_thread_status_changed(self, message):
         print(message)
@@ -66,6 +69,7 @@ class Window(QMainWindow):
                 item = QTableWidgetItem(col)
                 self.ui.tableWidget.setItem(row_idx, col_idx, item)
 
+        self.kita_thread = None
 
 
 if __name__ == '__main__':
