@@ -10,9 +10,13 @@ from kita import KitaCrawler
 
 class KitaThread(QThread):
     def run(self):
-        print('thread start')
-        self.result = sum(i for i in range(100000000))
-        print('thread end')
+        page = 1
+        max = 20
+
+        self.crawer = KitaCrawler()
+
+        self.header_cols = self.crawer.header_cols
+        self.rows = self.crawer.get_page(page, max)
 
 
 class Window(QMainWindow):
@@ -24,7 +28,6 @@ class Window(QMainWindow):
         self.ui.tableWidget.verticalHeader().setVisible(False)
         self.ui.show()
 
-        self.crawer = KitaCrawler()
         self.data = []
 
     def populate(self):
@@ -33,27 +36,21 @@ class Window(QMainWindow):
         self.kita_thread.finished.connect(self.on_thread_finished)
         self.kita_thread.start()
 
-
         '''
         page = self.ui.spinPage.value()
         max = self.ui.spinMax.value()
-
-        rows = self.crawer.get_page(page, max)
-
-        self.ui.tableWidget.setColumnCount(len(self.crawer.header_cols))
-        self.ui.tableWidget.setHorizontalHeaderLabels(self.crawer.header_cols)
-
-        self.ui.tableWidget.setRowCount(len(rows))
-        for row_idx, row in enumerate(rows):
-            for col_idx, col in enumerate(row):
-                item = QTableWidgetItem(col)
-                self.ui.tableWidget.setItem(row_idx, col_idx, item)
         '''
 
     def on_thread_finished(self):
-        print('completed')
-        print('result : {}'.format(self.kita_thread.result))
-        QMessageBox.information(self, '결과', str(self.kita_thread.result))
+        self.ui.tableWidget.setColumnCount(len(self.kita_thread.header_cols))
+        self.ui.tableWidget.setHorizontalHeaderLabels(self.kita_thread.header_cols)
+
+        self.ui.tableWidget.setRowCount(len(self.kita_thread.rows))
+        for row_idx, row in enumerate(self.kita_thread.rows):
+            for col_idx, col in enumerate(row):
+                item = QTableWidgetItem(col)
+                self.ui.tableWidget.setItem(row_idx, col_idx, item)
+
 
 
 if __name__ == '__main__':
