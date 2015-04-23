@@ -57,7 +57,7 @@ class Window(QMainWindow):
             self.kita_thread.start()
 
     def on_thread_status_changed(self, message):
-        print(message)
+        self.ui.label.setText(message)
 
     def on_thread_finished(self):
         self.ui.tableWidget.setColumnCount(len(self.kita_thread.header_cols))
