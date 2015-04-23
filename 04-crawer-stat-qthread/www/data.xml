@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DATA>
+    <ROW>
+        <NO>1</NO>
+        <CODE>854232</CODE>
+        <NAME>메모리</NAME>
+        <PRICE>28,849,464</PRICE>
+    </ROW>
+    <ROW>
+        <NO>2</NO>
+        <CODE>890590</CODE>
+        <NAME>기타</NAME>
+        <PRICE>13,820,541</PRICE>
+    </ROW>
+    <ROW>
+        <NO>3</NO>
+        <CODE>870323</CODE>
+        <NAME>실린더</NAME>
+        <PRICE>12,312,310</PRICE>
+    </ROW>
+    <ROW>
+        <NO>4</NO>
+        <CODE>271929</CODE>
+        <NAME>그 밖의 기기</NAME>
+        <PRICE>9,293,920</PRICE>
+    </ROW>
+</DATA>
