@@ -1,10 +1,16 @@
 import sys
 from time import sleep
 from PyQt5 import uic
+from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import (
     QApplication, QDialog, QMainWindow, QTableWidgetItem
 )
 from kita import KitaCrawler
+
+
+class KitaThread(QThread):
+    def run(self):
+        self.sleep(10)
 
 
 class Window(QMainWindow):
@@ -21,7 +27,8 @@ class Window(QMainWindow):
 
     def populate(self):
 
-        sleep(10)
+        self.kita_thread = KitaThread()
+        self.kita_thread.start()
 
 
         '''
