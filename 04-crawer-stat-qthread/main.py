@@ -9,14 +9,16 @@ from kita import KitaCrawler
 
 
 class KitaThread(QThread):
-    def run(self):
-        page = 1
-        max = 20
+    def __init__(self, page, max):
+        super(KitaThread, self).__init__()
+        self.page = page
+        self.max = max
 
+    def run(self):
         self.crawer = KitaCrawler()
 
         self.header_cols = self.crawer.header_cols
-        self.rows = self.crawer.get_page(page, max)
+        self.rows = self.crawer.get_page(self.page, self.max)
 
 
 class Window(QMainWindow):
@@ -31,15 +33,12 @@ class Window(QMainWindow):
         self.data = []
 
     def populate(self):
-
-        self.kita_thread = KitaThread()
-        self.kita_thread.finished.connect(self.on_thread_finished)
-        self.kita_thread.start()
-
-        '''
         page = self.ui.spinPage.value()
         max = self.ui.spinMax.value()
-        '''
+
+        self.kita_thread = KitaThread(page, max)
+        self.kita_thread.finished.connect(self.on_thread_finished)
+        self.kita_thread.start()
 
     def on_thread_finished(self):
         self.ui.tableWidget.setColumnCount(len(self.kita_thread.header_cols))
