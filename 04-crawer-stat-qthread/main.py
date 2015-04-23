@@ -1,4 +1,5 @@
 import sys
+from time import sleep
 from PyQt5 import uic
 from PyQt5.QtWidgets import (
     QApplication, QDialog, QMainWindow, QTableWidgetItem
@@ -19,6 +20,11 @@ class Window(QMainWindow):
         self.data = []
 
     def populate(self):
+
+        sleep(10)
+
+
+        '''
         page = self.ui.spinPage.value()
         max = self.ui.spinMax.value()
 
@@ -32,7 +38,7 @@ class Window(QMainWindow):
             for col_idx, col in enumerate(row):
                 item = QTableWidgetItem(col)
                 self.ui.tableWidget.setItem(row_idx, col_idx, item)
-
+        '''
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
