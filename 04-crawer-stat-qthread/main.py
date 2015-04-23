@@ -3,7 +3,7 @@ from time import sleep
 from PyQt5 import uic
 from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import (
-    QApplication, QDialog, QMainWindow, QTableWidgetItem
+    QApplication, QDialog, QMainWindow, QMessageBox, QTableWidgetItem
 )
 from kita import KitaCrawler
 
@@ -11,7 +11,7 @@ from kita import KitaCrawler
 class KitaThread(QThread):
     def run(self):
         print('thread start')
-        self.sleep(10)
+        self.result = sum(i for i in range(100000000))
         print('thread end')
 
 
@@ -52,6 +52,8 @@ class Window(QMainWindow):
 
     def on_thread_finished(self):
         print('completed')
+        print('result : {}'.format(self.kita_thread.result))
+        QMessageBox.information(self, '결과', str(self.kita_thread.result))
 
 
 if __name__ == '__main__':
