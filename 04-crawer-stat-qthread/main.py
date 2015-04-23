@@ -1,7 +1,7 @@
 import sys
 from time import sleep
 from PyQt5 import uic
-from PyQt5.QtCore import QThread
+from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtWidgets import (
     QApplication, QDialog, QMainWindow, QMessageBox, QTableWidgetItem
 )
@@ -9,6 +9,8 @@ from kita import KitaCrawler
 
 
 class KitaThread(QThread):
+    status_changed = pyqtSignal(str, name='status_changed')
+
     def __init__(self, page, max):
         super(KitaThread, self).__init__()
         self.page = page
@@ -26,6 +28,7 @@ class KitaThread(QThread):
 
         for current_page in range(start_page, end_page):
             print('current_page : {}'.format(current_page))
+            self.status_changed.emit('현재 상황 : {}'.format(current_page))
             self.rows.extend(self.crawer.get_page(current_page, self.max))
             sleep(0.1)
 
@@ -46,8 +49,12 @@ class Window(QMainWindow):
         max = self.ui.spinMax.value()
 
         self.kita_thread = KitaThread(page, max)
+        self.kita_thread.status_changed.connect(self.on_thread_status_changed)
         self.kita_thread.finished.connect(self.on_thread_finished)
         self.kita_thread.start()
+
+    def on_thread_status_changed(self, message):
+        print(message)
 
     def on_thread_finished(self):
         self.ui.tableWidget.setColumnCount(len(self.kita_thread.header_cols))
