@@ -1,7 +1,7 @@
 import os
 import sys
 from PyQt5 import uic
-from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import QObject, QUrl, pyqtSlot
 from PyQt5.QtWidgets import QApplication, QMainWindow, QListWidgetItem
 
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
@@ -13,6 +13,13 @@ URLS = [
     ('네이트', 'http://m.nate.com'),
 ]
 
+
+class Hybrid(QObject):
+    @pyqtSlot(int, int, result=int)
+    def sum(self, x, y):
+        return x + y
+
+
 class Window(QMainWindow):
     def __init__(self):
         super(Window, self).__init__()
@@ -21,6 +28,9 @@ class Window(QMainWindow):
         self.ui.listWidget.currentRowChanged.connect(self.on_row_changed)
         self.ui.show()
 
+        self.ui.webView.loadFinished.connect(self.on_load_finished)
+
+        self.hybrid = Hybrid()
         self.load_data()
 
     def load_data(self):
@@ -30,6 +40,12 @@ class Window(QMainWindow):
 
         if URLS:
             self.on_row_changed(0)
+
+    def on_load_finished(self, is_ok):
+        if not is_ok:
+            self.ui.webView.setHtml('page not found')
+        else:
+            self.ui.webView.page().mainFrame().addToJavaScriptWindowObject("hybrid", self.hybrid)
 
     def on_row_changed(self, current_row):
         name, url = URLS[current_row]
