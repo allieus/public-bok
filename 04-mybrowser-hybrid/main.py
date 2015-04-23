@@ -3,6 +3,7 @@ import sys
 from PyQt5 import uic
 from PyQt5.QtCore import QObject, QUrl, pyqtSlot
 from PyQt5.QtWidgets import QApplication, QMainWindow, QListWidgetItem
+from kita import KitaCrawler
 
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 
@@ -18,6 +19,32 @@ class Hybrid(QObject):
     @pyqtSlot(int, int, result=int)
     def sum(self, x, y):
         return x + y
+
+    @pyqtSlot(int, int, result=str)
+    def kita_crawer(self, page, max):
+        crawer = KitaCrawler()
+        header_cols = crawer.header_cols
+        rows = crawer.get_page(page, max)
+
+        thead_content = ''.join('<th>{}</th>'.format(col) for col in header_cols)
+
+        tbody_content = []
+        for row in rows:
+            tr_content = ''.join('<td>{}</td>'.format(col) for col in row)
+            tbody_content.append('<tr>' + tr_content + '</tr>')
+        tbody_content = ''.join(tbody_content)
+
+        html = '''
+<table>
+<thead>{}
+</thead>
+<tbody>{}
+</tbody>
+</table>
+'''.format(thead_content, tbody_content)
+
+        return html
+
 
 
 class Window(QMainWindow):
