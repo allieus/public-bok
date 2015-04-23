@@ -10,7 +10,9 @@ from kita import KitaCrawler
 
 class KitaThread(QThread):
     def run(self):
+        print('thread start')
         self.sleep(10)
+        print('thread end')
 
 
 class Window(QMainWindow):
@@ -28,6 +30,7 @@ class Window(QMainWindow):
     def populate(self):
 
         self.kita_thread = KitaThread()
+        self.kita_thread.finished.connect(self.on_thread_finished)
         self.kita_thread.start()
 
 
@@ -46,6 +49,10 @@ class Window(QMainWindow):
                 item = QTableWidgetItem(col)
                 self.ui.tableWidget.setItem(row_idx, col_idx, item)
         '''
+
+    def on_thread_finished(self):
+        print('completed')
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
