@@ -9,7 +9,7 @@ from kita import KitaCrawler
 
 
 class KitaThread(QThread):
-    status_changed = pyqtSignal(str, name='status_changed')
+    status_changed = pyqtSignal(int, str, name='status_changed')
 
     def __init__(self, page, max):
         super(KitaThread, self).__init__()
@@ -26,9 +26,11 @@ class KitaThread(QThread):
         start_page = self.page
         end_page = self.page + once
 
-        for current_page in range(start_page, end_page):
+        for idx, current_page in enumerate(range(start_page, end_page)):
+            percent = 100 * (idx+1) / (end_page - start_page)
+
             print('current_page : {}'.format(current_page))
-            self.status_changed.emit('현재 상황 : {}'.format(current_page))
+            self.status_changed.emit(percent, '현재 상황 : {}'.format(current_page))
             self.rows.extend(self.crawer.get_page(current_page, self.max))
             sleep(0.1)
 
@@ -56,7 +58,8 @@ class Window(QMainWindow):
             self.kita_thread.finished.connect(self.on_thread_finished)
             self.kita_thread.start()
 
-    def on_thread_status_changed(self, message):
+    def on_thread_status_changed(self, percent, message):
+        self.ui.progressBar.setValue(percent)
         self.ui.label.setText(message)
 
     def on_thread_finished(self):
