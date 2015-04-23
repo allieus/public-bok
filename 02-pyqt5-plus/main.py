@@ -3,14 +3,11 @@ from PyQt5 import uic as pyqt5_uic
 # from PyQt4 import uic as pyqt4_uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 
-STYLESHEET = '''
-QWidget#Form {
-    background-image: url('python-logo.png');
-}
-QPushButton {
-    background-color: yellow;
-}
-'''
+
+
+STYLESHEET = open('main.css', 'rb').read().decode('utf8')
+
+
 
 class Window(QMainWindow):
     def __init__(self, app):
