@@ -13,12 +13,21 @@ class KitaThread(QThread):
         super(KitaThread, self).__init__()
         self.page = page
         self.max = max
+        self.rows = []
 
     def run(self):
         self.crawer = KitaCrawler()
-
         self.header_cols = self.crawer.header_cols
-        self.rows = self.crawer.get_page(self.page, self.max)
+
+        once = 10
+
+        start_page = self.page
+        end_page = self.page + once
+
+        for current_page in range(start_page, end_page):
+            print('current_page : {}'.format(current_page))
+            self.rows.extend(self.crawer.get_page(current_page, self.max))
+            sleep(0.1)
 
 
 class Window(QMainWindow):
