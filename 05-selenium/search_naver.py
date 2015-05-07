@@ -3,7 +3,11 @@ import sys
 from getpass import getpass
 from time import sleep
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from bs4 import BeautifulSoup
 
 
 def main(id, password, browser):
@@ -30,6 +34,21 @@ def main(id, password, browser):
     element.send_keys(password)
 
     element.send_keys(Keys.RETURN)
+
+    print('로그인될 때까지, 1초 대기')
+    sleep(1)
+
+    print('메일 서비스로 이동.')
+    driver.get('http://mail.naver.com/')
+
+    print('렌더링될때까지 대기')
+    old_page = driver.find_element_by_tag_name('html')
+    WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.ID, 'list_for_view')))
+
+    html = driver.page_source
+    soup = BeautifulSoup(html)
+    for row in soup.select('#list_for_view .mailList > li'):
+        print(row.select('.subject')[0].text)
 
     # print('3초 뒤에 브라우저를 닫습니다.')
     # sleep(3)
