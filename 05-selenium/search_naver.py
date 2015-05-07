@@ -22,10 +22,21 @@ def main(id, password, browser):
         else:
             exit('not found chrome-driver for {}'.format(sys.platform))
         driver = webdriver.Chrome(chrome_driver)
+    elif browser == 'phantomjs':
+        if sys.platform.startswith('win'):
+            phantomjs_path = os.path.join(os.environ['APPDATA'], 'npm', 'node_modules',
+                         'phantomjs', 'lib', 'phantom', 'phantomjs.exe')
+            driver = webdriver.PhantomJS(
+                executable_path = phantomjs_path,
+                service_args = ['--ignore-ssl-errors=true'])
+        else:
+            driver = webdriver.PhantomJS()
     else:
         exit('invalid browser : {}'.format(browser))
 
     driver.get('https://nid.naver.com/nidlogin.login')
+
+    driver.get_screenshot_as_file('screenshot.png')
 
     element = driver.find_element_by_name('id')
     element.send_keys(id)
@@ -35,8 +46,8 @@ def main(id, password, browser):
 
     element.send_keys(Keys.RETURN)
 
-    print('로그인될 때까지, 1초 대기')
-    sleep(1)
+    print('로그인될 때까지, 3초 대기')
+    sleep(3)
 
     print('메일 서비스로 이동.')
     driver.get('http://mail.naver.com/')
