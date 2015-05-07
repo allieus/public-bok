@@ -1,8 +1,10 @@
 import os
 import sys
+import webbrowser
 from PyQt5 import uic
 from PyQt5.QtCore import QObject, QUrl, pyqtSlot
 from PyQt5.QtWidgets import QApplication, QMainWindow, QListWidgetItem
+from PyQt5.QtWebKitWidgets import QWebPage
 from kita import KitaCrawler
 
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
@@ -57,6 +59,7 @@ class Window(QMainWindow):
         self.ui.show()
 
         self.ui.webView.loadFinished.connect(self.on_load_finished)
+        self.ui.webView.linkClicked.connect(self.on_link_clicked)
 
         self.hybrid = Hybrid()
         self.load_data()
@@ -74,6 +77,10 @@ class Window(QMainWindow):
             self.ui.webView.setHtml('page not found')
         else:
             self.ui.webView.page().mainFrame().addToJavaScriptWindowObject("hybrid", self.hybrid)
+            self.ui.webView.page().setLinkDelegationPolicy(QWebPage.DelegateExternalLinks)
+
+    def on_link_clicked(self, qurl):
+        webbrowser.open_new_tab(qurl.url())
 
     def on_row_changed(self, current_row):
         name, url = URLS[current_row]
