@@ -1,27 +1,66 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf8" />
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
 <style>
-    th, td {
-        border: 1px solid #333;
-    }
+body {
+    margin: 60px 0 0 0;
+}
 </style>
+</head>
+<body>
 
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">BOK</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">First Link</a></li>
+                <li><a href="#">Second Link</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Right Link</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-index.html
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <p>
+                <a href="javascript: test_calc();" class="btn btn-primary btn-lg">계산 테스트</a>
+                <a href="javascript: test_kita_crawer();" class="btn btn-info btn-lg">크롤링 테스트</a>
+            </p>
 
-<a href="javascript: test();">TEST</a>
-<a href="javascript: test_kita_crawer();">kita crawer</a>
+            <div id="test_kita_crawer_result"></div>
+        </div>
+    </div>
+</div>
 
-<hr/>
-
-<div id="test_kita_crawer_result"></div>
-
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script>
-    function test() {
-        alert(window.hybrid.sum(1, 2));
+    function test_calc() {
+        alert("계산값 : " + window.hybrid.sum(1, 2));
     }
-
     function test_kita_crawer() {
         var html = window.hybrid.kita_crawer(1, 40);
-        document.getElementById('test_kita_crawer_result').innerHTML = html;
+        $('#test_kita_crawer_result').html(html);
+        $('#test_kita_crawer_result table').addClass("table table-hover table-bordered");
     }
 </script>
+</body>
+</html>
+
+
 
