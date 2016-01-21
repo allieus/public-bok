@@ -7,6 +7,7 @@ URLS = [
     ('네이버', 'http://m.naver.com'),
     ('다음', 'http://m.daum.net'),
     ('네이트', 'http://m.nate.com'),
+    ('구글', 'http://google.co.kr'),
 ]
 
 class Window(QMainWindow):
